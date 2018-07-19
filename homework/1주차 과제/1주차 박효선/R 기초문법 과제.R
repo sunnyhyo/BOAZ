@@ -1,13 +1,5 @@
 ###과제
-getwd()
-sample<-read.delim("./sample.txt", header=TRUE)
-head(sample)
-sample
-length(c(1,2,3))
-nrow(sample)
-class(c(1,2,3))
-class(sample)
-dim(sample)
+
 
 # 1. sum() 함수와 똑같은 기능을 하는 함수를 for문을 이용하여 작성하시오.
 
