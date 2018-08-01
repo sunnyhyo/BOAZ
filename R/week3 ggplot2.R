@@ -38,12 +38,12 @@ library(gridExtra)
 ######################
 # DATASETS
 #DATA 1. diamonds data
-#캐럿, 컷의품질, 색깔, 등급, 크기, 가격, x길이, y너비, z깊이
+#캐럿, 컷, 색깔, 등급, 깊이, 가격, 
 head(diamonds)
 summary(diamonds)
 glimpse(diamonds)
 #DATA 2. mpg data
-#제조사, 모델, 엔진배기, 제조년도, 실린더, 자동변속기, 구동방식, 시내주행거리 , 고속도로주행거리
+#제조사, 모델, , 연도, , , ,  , 
 head(mpg)
 summary(mpg)
 glimpse(mpg)
@@ -66,7 +66,7 @@ plot(mpg$cty, mpg$hwy)
 qplot(x = cty, y = hwy, color = cyl, data = mpg, geom = "point")
 
 #ggplot2
-ggplot(data = mpg, aes(x = cty, y = hwy))  #aesthetic
+ggplot(data = mpg, aes(x = cty, y = hwy))
 
 ggplot(mpg, aes(x = cty, y = hwy)) +
   geom_point(aes(color=cyl)) +
@@ -223,13 +223,6 @@ c+  geom_smooth(span = 0.2)
 c+  geom_smooth(method = "gam", formula = y ~ s(x)) 
 c+  geom_smooth(method = "lm")
 
-# diamonds 데이터에 캐럿log10(carat)과 가격log10(price)산점도를 컷의품질(~cut)별로 나타내기
-diamonds %>% ggplot(aes(log10(carat), log10(price))) +    
-  #geom_point() +    
-  geom_bin2d() +
-  facet_wrap(~cut, nrow = 1) 
-  
-
 
 ##################
 #4. 연속형 변수와 범주형 변수 
@@ -266,9 +259,9 @@ grid.arrange(d3, d4, d5, d6)
 
 #QUESTION 4.
 # d1 플롯에 제목(title), 축이름(labels) 지정하기
-d1 +ggtitle("") 
-d1 +ggtitle("") + xlab("class") + ylab("hwy")
-d1 +labs(title="", x="new.class", y="new.hwy") 
+d1 +ggtitle("hwy by class") 
+d1 +ggtitle("hwy by class") + xlab("class") + ylab("hwy")
+d1 +labs(title="hwy by class", x="new.class", y="new.hwy") 
 
 
 
@@ -277,17 +270,15 @@ d1 +labs(title="", x="new.class", y="new.hwy")
 #xtabs()        : 도수 분포 알아내기
 #mosaicplot()   : 결과를 시각화하기
 
-# diamonds 데이터에서 
+# using diamonds dataset for illustration
 df <- diamonds %>%
   group_by(cut, clarity) %>%
   summarise(count = n()) %>%
   mutate(cut.count = sum(count),
          prop = count/sum(count)) %>%
   ungroup()
-xtabs(cut.count~ cut, df)   #cut의 총 횟수
-diamonds$cut
-diamonds$clarity
-head(df)
+xtabs(cut.count~ cut, df)
+
 xtabs(~ cut, data.frame(diamonds))
 xtabs(~ cut+clarity, data.frame(diamonds))
 xtabs(~ cut+clarity+color, data.frame(diamonds))
@@ -312,6 +303,8 @@ ggplot(df,
   # theme(panel.spacing.x = unit(0, "npc")) + # if no spacing preferred between bars
   theme_void() 
 
+
+
 #############
 #6. 시계열 자료
 
@@ -320,12 +313,6 @@ economics %>% ggplot(aes(date, unemploy / pop)) +
   geom_line()
 economics %>% ggplot(aes(date, uempmed)) +   
   geom_line() 
-presidential < - subset(presidential, start > economics$date[1]) 
-ggplot(economics) +    geom_rect(aes(xmin = start, xmax = end, fill = party), ymin = -Inf, ymax = Inf, alpha = 0.2, data = presidential) +
-  geom_vline(aes(xintercept = as.numeric(start)), data = presidential, colour = "grey50", alpha = 0.5   ) +    
-  geom_text(aes(x = start, y = 2500, label = name), data = presidential,size = 3, vjust = 0, hjust = 0, nudge_x = 50   ) +    
-  geom_line(aes(date, unemploy)) +   
-  scale_fill_manual(values = c("blue", "red")) 
 
 
 ################
@@ -365,22 +352,13 @@ gapminder %>%
 # 옵션 따져보기
 #1. Stats 
 #An alternative way to build a layer
-#Use a stat to choose a common transformation to visualize, Each stat creates additional  variables to map aesthetics to.
-
-b1<- diamonds %>% ggplot(aes(price))               #도수분포 막대그래프
-
-b1+ stat_bin(geom="bar", binwidth = 1000)
-b1+ geom_bar(stat="bin")
-b1+ stat_density(adjust = 1)
-
+#레이어를 만드는 또다른 방법
 
 
 #################
 # 옵션 따져보기
 #2. Scale
-# Scales control how a plot map data values to visual values of an aesthetic.
-# To change the mapping, add a custom scale
-'
+# Scale 은 
 General Purpose scales Use with any aesthetic:  
   alpha, color, fill, linetype, shape, size 
 scale_*_continuous() - map cont’ values to visual values 
@@ -393,7 +371,7 @@ scale_x_date(labels = date_format("%m/%d"),  breaks = date_breaks("2 weeks")) - 
 scale_x_datetime() -  treat x values as date times. Use same arguments as scale_x_date(). 
 scale_x_log10() - Plot x on log10 scale 
 scale_x_reverse() - Reverse direction of x axis 
-scale_x_sqrt() - Plot x on square root scale'
+scale_x_sqrt() - Plot x on square root scale
 
 
 
@@ -410,20 +388,7 @@ gapminder %>% mutate(loggdp=log10(gdpPercap)) %>%
 #coordinate, labels, legend, themes
 
 ##############
-#############
-##############
-summary(seals)
-seals$z <- with(seals, sqrt(delta_long^2 + delta_lat^2))
-m<- ggplot(seals, aes(long, lat))
-m+ geom_contour(aes(z=z)) 
-
-#############
-#ggmap 사용해보기
-install.packages("ggmap")
-library(ggmap)
-
-ggmap(get_map(location="south korea", zoom=3)) +
-  geom_point(data= seals, aes(x=long, y=lat))
+#ggplot 은 아니지만 기타시각화 
 
 
 
