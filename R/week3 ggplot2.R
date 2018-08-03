@@ -43,7 +43,7 @@ head(diamonds)
 summary(diamonds)
 glimpse(diamonds)
 #DATA 2. mpg data
-#제조사, 모델, , 연도, , , ,  , 
+#제조사, 모델,자동차 연비, 연도,
 head(mpg)
 summary(mpg)
 glimpse(mpg)
@@ -66,10 +66,9 @@ plot(mpg$cty, mpg$hwy)
 qplot(x = cty, y = hwy, color = cyl, data = mpg, geom = "point")
 
 #ggplot2
-ggplot(data = mpg, aes(x = cty, y = hwy))
-
-ggplot(mpg, aes(x = cty, y = hwy)) +
-  geom_point(aes(color=cyl)) +
+#ggplot(data = mpg, aes(x = cty, y = hwy))
+ggplot(data= mpg, aes(x = cty, y = hwy)) +     # mpg 데이터사용, x축에 cty변수, y축에 hwy변수를 매핑
+  geom_point(aes(color=cyl)) +      #산점도 그리기. cyl별로 색깔을 지정
   geom_smooth(method ="lm") +
   coord_cartesian() +
   scale_color_gradient()+
