@@ -1,0 +1,8 @@
+<선형회귀 python 과제>
+
+1. boston 데이터에 column 중 하나인 LSTAT와 y의 선형회귀 수행
+2. 위 회귀분석의 r2 score와 mean_squared_error 출력
+3. 회귀선과 LSTAT와 y의 산점도를 한 그래프에 시각화
+4. LSTAT와의 피어슨 상관계수 절대값이 가장 낮은 column 찾기
+5. 4번에서 찾은 column + LSTAT와 y의 다중회귀 수행
+6. 위 회귀분석의 r2 score와 mean_squared_error 출력하고, 2번의 결과와 비교
